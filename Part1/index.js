@@ -3,29 +3,31 @@ let gameBoard = [];
 let topLeft;
 let topCent;
 let topRight;
-
 let midLeft;
 let midCent;
 let midRight;
-
 let botLeft;
 let botCent;
 let botRight;
 
+const resetButton = document.getElementById("reset-button");
+
 function play(id) {
   const playerSpan = document.getElementById("player");
   const clickedBox = document.getElementById(id);
-
-  if (playerSpan.innerHTML === "X") {
-    clickedBox.innerHTML = "X";
-    gameBoard[id] = "X";
-
-    playerSpan.innerHTML = "O";
+  if (clickedBox.innerHTML != "") {
   } else {
-    clickedBox.innerHTML = "O";
-    gameBoard[id] = "O";
+    if (playerSpan.innerHTML === "X") {
+      clickedBox.innerHTML = "X";
+      gameBoard[id] = "X";
 
-    playerSpan.innerHTML = "X";
+      playerSpan.innerHTML = "O";
+    } else {
+      clickedBox.innerHTML = "O";
+      gameBoard[id] = "O";
+
+      playerSpan.innerHTML = "X";
+    }
   }
 
   //Refresh the values of the array to our corresponding variables
@@ -33,10 +35,11 @@ function play(id) {
 
   //Check for (and declare) winner
   if (checkForWin()) {
-    reset();
+    resetButton.style.visibility = "visible";
+    disableBoard()
   } else if (checkFullBoard()) {
     alert("No Winner.");
-    reset();
+    resetButton.style.visibility = "visible";
   }
 }
 
@@ -103,7 +106,19 @@ function checkFullBoard() {
       boardFull = false;
     }
   }
-  return boardFull
+  return boardFull;
+}
+
+function disableBoard() {
+  for (let i = 0; i < 9; i++) {
+    document.getElementById(i).style.pointerEvents = "none"
+  }
+}
+
+function enableBoard() {
+  for (let i = 0; i < 9; i++) {
+    document.getElementById(i).style.pointerEvents = "auto"
+  }
 }
 
 function reset() {
@@ -113,4 +128,6 @@ function reset() {
     currBox.innerHTML = "";
   }
   gameBoard = [];
+  resetButton.style.visibility = "hidden"
+  enableBoard()
 }
